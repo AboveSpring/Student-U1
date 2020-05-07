@@ -12,7 +12,7 @@ export default function App() {
     <Router>
       <Fragment>
         <Switch>
-          <Route path="/Home" component={HomeScreen} />
+          <Route path="/BingBong" component={HomeScreen} />
           <Route path="/" exact component={HomeScreen} />
         </Switch>
       </Fragment>

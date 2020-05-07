@@ -35,7 +35,7 @@ export default function withHttpRequests(WrappedComponent) {
     render() {
       return (
         <WrappedComponent
-          deleteStudent={this.deleteStudent}
+          deleteStudentHOC={this.deleteStudent}
           getStudents={this.getStudents}
           postStudent={this.postStudent}
           {...this.props}

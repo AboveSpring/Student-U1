@@ -21,10 +21,14 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
+    this.getAllStudents()
+  }
+
+  getAllStudents = () => {
     this.props.getStudents()
       .then(res => {
         this.setState({ studentsInfo: res.data })
-      })
+      })  
   }
 
   handleInputChange = (event) => {
@@ -50,11 +54,17 @@ class HomeScreen extends Component {
       }
     }
     this.props.postStudent(this.newStudent);
-    this.componentDidMount()
+    this.getAllStudents()
+  }
+
+  studentRenderCallback = (dataFromChild) => {
+    if(dataFromChild === true){
+      this.getAllStudents() 
+    }
   }
 
   render() {
-
+    
     const { studentsInfo, nameInput, emailInput, cityInput, zipcodeInput, streetInput } = this.state;
 
     return (
@@ -63,7 +73,7 @@ class HomeScreen extends Component {
         <div className='container'>
           <div className='studentCards'>
             <Card.Group centered >
-              {studentsInfo.map((student, i) => (<StudentComponent key={i} studentsInfo={studentsInfo[i]} />))}
+              {studentsInfo.map((student, i) => (<StudentComponent callbackFromParent={this.studentRenderCallback} key={i} studentsInfo={studentsInfo[i]} />))}
             </Card.Group>
           </div>
 
