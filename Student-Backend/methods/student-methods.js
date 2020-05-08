@@ -2,8 +2,15 @@ const Student = require('../models/student-model')
 
 createStudent = (req, res) => {
   const body = req.body
-  const student = new Student(body)
 
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: 'You must provide all student info',
+    })
+  }
+
+  const student = new Student(body)
   student
     .save()
     .then(() => {
@@ -48,7 +55,7 @@ updateStudent = (req, res) => {
       })
     else
       res.status(204)
-      res.send()
+    res.send()
   }).catch(error => {
     return res.status(404).json({
       error,
