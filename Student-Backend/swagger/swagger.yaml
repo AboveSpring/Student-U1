@@ -1,0 +1,185 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Students
+  description: |
+    Swagger for Student Api
+    
+    [Link to localhost:8000](http://localhost:8000/swagger.yaml)
+    
+    
+    
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8000
+paths:
+  /student:
+    get:
+      summary: List all students
+      operationId: listUsers
+      tags:
+        - Student
+      responses:
+        '200':
+          description: Array of students
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/ResponseStudents'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a student
+      operationId: createStudent
+      tags:
+      - Student
+      requestBody:
+        description: the student to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseStudent'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /student/{studentId}:
+    get:
+      summary: Info for a specific student
+      operationId: showStudentById
+      tags:
+        - Student
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          description: The id of the student to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseStudent"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update a specific student
+      operationId: updateStudentByID
+      tags:
+        - Student
+      parameters:
+      - name: studentId
+        in: path
+        required: true
+        description: The id of the student to retrieve
+        schema:
+          type: string
+      requestBody:
+       description: the post to create
+       required: true
+       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Student'  
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseStudent"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a specific student
+      operationId: deleteStudentByID
+      tags: 
+        - Student
+      parameters: 
+      - name: studentId
+        in: path
+        required: true
+        description: Deletes the student
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Expected respsone to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseStudent"
+        '204':
+          description: Valid request but there is nothing to delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Student:
+      properties:
+        email:
+          type: string
+          uniqueItems: true
+        name:
+          type: string
+        address:
+          properties:
+            street:
+              type: string
+              uniqueItems: true
+            zipcode:
+              type: string
+            city:
+              type: string
+    ResponseStudent:
+      allOf:
+      - $ref: '#/components/schemas/Student'
+      - properties:
+          id:
+            type: integer
+          _id:
+            type: string
+            format: uuid
+    ResponseStudents:
+      type: array
+      items:
+        $ref: "#/components/schemas/ResponseStudent"
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    
